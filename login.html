@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Universal BaaS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { 
+            background-color: #0f172a; 
+            color: #f8fafc; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh;
+        }
+        .login-container {
+            background: #1e293b;
+            padding: 40px 30px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-container h2 {
+            color: #10b981; /* नियॉन ग्रीन */
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        .login-container p { color: #94a3b8; margin-bottom: 30px; font-size: 0.9rem; }
+        
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { display: block; margin-bottom: 8px; color: #cbd5e1; font-size: 0.9rem; }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+        }
+        .input-group input:focus { border-color: #10b981; }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #10b981;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .login-btn:hover { background: #0ea5e9; color: #fff; }
+        
+        #error-msg { color: #ef4444; margin-top: 15px; font-size: 0.85rem; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2><i class="fa-solid fa-server"></i> Universal BaaS</h2>
+        <p>System Admin Authentication</p>
+
+        <!-- लॉगिन फॉर्म -->
+        <form id="login-form">
+            <div class="input-group">
+                <label>Admin Email</label>
+                <input type="email" id="email" placeholder="Enter super admin email" required>
+            </div>
+            <div class="input-group">
+                <label>Master Password</label>
+                <input type="password" id="password" placeholder="Enter master password" required>
+            </div>
+            <button type="submit" class="login-btn" id="login-btn">Secure Login <i class="fa-solid fa-lock"></i></button>
+            <div id="error-msg">Email या Password गलत है बॉस!</div>
+        </form>
+    </div>
+
+    <!-- लॉगिन की जावास्क्रिप्ट -->
+    <script src="login.js"></script>
+</body>
+</html>

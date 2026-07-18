@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal BaaS - Master Control</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- साइडबार -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <h2><i class="fa-solid fa-server"></i> <span>Universal BaaS</span></h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li class="active"><a href="#"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-folder-tree"></i> <span>All Projects</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-database"></i> <span>Realtime DB</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-shield-halved"></i> <span>Authentication</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-key"></i> <span>API Keys</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- मेन कंटेंट -->
+    <div class="main-content" id="main-content">
+        <header>
+            <h2><i class="fa-solid fa-bars" id="nav-toggle"></i> System Overview</h2>
+            <div class="user-wrapper">
+                <div style="background: #f59e0b; color: #000; font-weight: bold; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 10px;">AD</div>
+                <div>
+                    <h4>Super Admin</h4>
+                    <small>System Owner</small>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- 1. DASHBOARD -->
+            <div id="view-dashboard" class="content-section">
+                <div class="cards">
+                    <div class="card-single"><div><h1 id="total-projects">0</h1><span>Active Projects</span></div><div><i class="fa-solid fa-folder-open"></i></div></div>
+                    <div class="card-single"><div><h1 id="active-databases">0</h1><span>Realtime Databases</span></div><div><i class="fa-solid fa-database"></i></div></div>
+                    <div class="card-single"><div><h1 id="api-requests">0</h1><span>API Requests (Today)</span></div><div><i class="fa-solid fa-bolt"></i></div></div>
+                </div>
+            </div>
+
+            <!-- 2. ALL PROJECTS -->
+            <div id="view-projects" class="content-section" style="display: none;">
+                <div class="section-header" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <h3 style="color: #f8fafc;">System Projects</h3>
+                    <button id="open-add-project-btn" style="background: #10b981; color: #000; padding: 10px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">+ Create Project</button>
+                </div>
+                <div style="background: #1e293b; padding: 15px; border-radius: 10px; border: 1px solid #334155;">
+                    <table width="100%" style="color: #fff; text-align: left; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #334155;">
+                                <th style="padding: 10px;">Project Name</th>
+                                <th style="padding: 10px;">API Key</th>
+                                <th style="padding: 10px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projects-list">
+                            <tr><td colspan="3" style="padding: 15px; text-align: center; color: #94a3b8;">No projects found. Create one!</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 3. REALTIME DATABASE -->
+            <div id="view-database" class="content-section" style="display: none;">
+                <div class="section-header" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <h3 style="color: #f8fafc;"><i class="fa-solid fa-database" style="color: #10b981; margin-right: 10px;"></i> Realtime Database</h3>
+                </div>
+                <div style="background: #0f172a; padding: 20px; border-radius: 10px; border: 1px solid #334155; font-family: monospace; color: #10b981;">
+                    <div style="color: #94a3b8; margin-bottom: 15px;">// root_database / Select a project</div>
+                    <ul style="list-style: none; padding-left: 10px; line-height: 2;">
+                        <li><i class="fa-solid fa-caret-down" style="color: #64748b;"></i> <span style="color: #f8fafc;">users:</span> { ... }</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 4. AUTHENTICATION -->
+            <div id="view-auth" class="content-section" style="display: none;">
+                <div class="section-header" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <h3 style="color: #f8fafc;"><i class="fa-solid fa-shield-halved" style="color: #10b981; margin-right: 10px;"></i> Authentication</h3>
+                    <button id="open-add-user-btn" style="background: #10b981; color: #000; padding: 10px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">+ Add User</button>
+                </div>
+                <div style="background: #1e293b; padding: 15px; border-radius: 10px; border: 1px solid #334155;">
+                    <table width="100%" style="color: #fff; text-align: left; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #334155;">
+                                <th style="padding: 10px;">Email</th>
+                                <th style="padding: 10px;">User UID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auth-users-list">
+                            <tr><td colspan="2" style="padding: 15px; text-align: center; color: #94a3b8;">Loading Users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 5. API KEYS -->
+            <div id="view-apikeys" class="content-section" style="display: none;">
+                <h3 style="color: #f8fafc; margin-bottom: 20px;">API Keys Management</h3>
+            </div>
+
+            <!-- 6. SETTINGS -->
+            <div id="view-settings" class="content-section" style="display: none;">
+                <h3 style="color: #f8fafc; margin-bottom: 20px;">System Settings</h3>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL 1: Add User Pop-up -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-plus"></i> Create New User</h3>
+                <span class="close-btn" id="closeUserModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 15px;">
+                    <label style="color: #cbd5e1; display: block; margin-bottom: 5px;">User Email</label>
+                    <input type="email" id="new-user-email" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: #fff; outline: none;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="color: #cbd5e1; display: block; margin-bottom: 5px;">Password</label>
+                    <input type="password" id="new-user-password" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: #fff; outline: none;">
+                </div>
+                <button id="save-user-btn" style="width: 100%; padding: 12px; background: #10b981; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Add to Database</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Create Project Pop-up (नया कदम) -->
+    <div id="addProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-folder-plus"></i> Create New Project</h3>
+                <span class="close-btn" id="closeProjectModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 15px;">
+                    <label style="color: #cbd5e1; display: block; margin-bottom: 5px;">Project Name</label>
+                    <input type="text" id="new-project-name" placeholder="e.g. Adept Play" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: #fff; outline: none;">
+                </div>
+                <button id="save-project-btn" style="width: 100%; padding: 12px; background: #10b981; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Create & Generate Key</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
