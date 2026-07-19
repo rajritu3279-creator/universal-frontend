@@ -199,6 +199,18 @@
             document.getElementById('auth-section').style.display = 'flex';
             document.getElementById('logout-btn').style.display = 'none';
         }
+              /* === MOBILE RESPONSIVE FIX === */
+        @media (max-width: 768px) {
+            #workspace-section { flex-direction: column; height: auto; }
+            .work-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #334155; display: flex; overflow-x: auto; padding: 10px 0; white-space: nowrap; }
+            .work-sidebar h3 { display: none; } /* मोबाइल में हेडिंग छुपा दी */
+            .menu-item { display: inline-block; border-left: none; border-bottom: 3px solid transparent; padding: 10px 15px; }
+            .menu-item.active, .menu-item:hover { background: transparent; border-left-color: transparent; border-bottom-color: #3b82f6; }
+            .work-main { padding: 15px; }
+            .setting-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .toggle-btn { width: 100%; }
+        }
+
     </script>
 </body>
 </html>
