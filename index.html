@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universal BaaS - Master Control</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- साइडबार -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
             <h2><i class="fa-solid fa-server"></i> <span>Universal BaaS</span></h2>
@@ -27,8 +26,7 @@
         </div>
     </nav>
 
-    <!-- मेन कंटेंट -->
-    < class="main-content" id="main-content">
+    <div class="main-content" id="main-content">
         <header>
             <h2><i class="fa-solid fa-bars" id="nav-toggle"></i> System Overview</h2>
             <div class="user-wrapper">
@@ -41,18 +39,16 @@
         </header>
 
         <main>
-            <!-- 1. DASHBOARD -->
             <div id="view-dashboard" class="content-section">
                 <div class="cards">
                     <div class="card-single"><div><h1 id="total-projects">0</h1><span>Active Projects</span></div><div><i class="fa-solid fa-folder-open"></i></div></div>
-                    <div class="card-single"><div><h1 id="active-databases">0</h1><span>Realtime Databases</span></div><div><i class="fa-solid fa-database"></i></div></div>
-                    <div class="card-single"><div><h1 id="api-requests">0</h1><span>API Requests (Today)</span></div><div><i class="fa-solid fa-bolt"></i></div></div>
+                    <div class="card-single"><div><h1 id="active-databases">1</h1><span>Realtime Databases</span></div><div><i class="fa-solid fa-database"></i></div></div>
+                    <div class="card-single"><div><h1 id="api-requests">Live</h1><span>System Status</span></div><div><i class="fa-solid fa-bolt"></i></div></div>
                 </div>
             </div>
 
-            <!-- 2. ALL PROJECTS -->
             <div id="view-projects" class="content-section" style="display: none;">
-                <div class="section-header" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
                     <h3 style="color: #f8fafc;">System Projects</h3>
                     <button id="open-add-project-btn" style="background: #10b981; color: #000; padding: 10px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">+ Create Project</button>
                 </div>
@@ -65,99 +61,65 @@
                                 <th style="padding: 10px;">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="projects-list">
-                            <tr><td colspan="3" style="padding: 15px; text-align: center; color: #94a3b8;">No projects found. Create one!</td></tr>
-                        </tbody>
+                        <tbody id="projects-list"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- 3. REALTIME DATABASE -->
             <div id="view-database" class="content-section" style="display: none;">
-                <div class="section-header" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                    <h3 style="color: #f8fafc;"><i class="fa-solid fa-database" style="color: #10b981; margin-right: 10px;"></i> Realtime Database</h3>
-                </div>
-                <div style="background: #0f172a; padding: 20px; border-radius: 10px; border: 1px solid #334155; font-family: monospace; color: #10b981;">
-                    <div style="color: #94a3b8; margin-bottom: 15px;">// root_database / Select a project</div>
-                    <ul style="list-style: none; padding-left: 10px; line-height: 2;">
-                        <li><i class="fa-solid fa-caret-down" style="color: #64748b;"></i> <span style="color: #f8fafc;">users:</span> { ... }</li>
-                    </ul>
+                <h3 style="color: #f8fafc; margin-bottom: 20px;"><i class="fa-solid fa-database" style="color: #10b981;"></i> Live Realtime Database</h3>
+                <div style="background: #0f172a; padding: 20px; border-radius: 10px; border: 1px solid #334155;">
+                    <button onclick="loadRealtimeDB()" style="background: #3b82f6; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 15px;">Refresh Live Data <i class="fa-solid fa-rotate-right"></i></button>
+                    <pre id="json-viewer" style="color: #10b981; font-family: monospace; overflow-x: auto; font-size: 14px;">// Click Refresh to load data...</pre>
                 </div>
             </div>
 
-            <!-- 4. AUTHENTICATION -->
             <div id="view-auth" class="content-section" style="display: none;">
-                <div class="section-header" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                    <h3 style="color: #f8fafc;"><i class="fa-solid fa-shield-halved" style="color: #10b981; margin-right: 10px;"></i> Authentication</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <h3 style="color: #f8fafc;"><i class="fa-solid fa-shield-halved" style="color: #10b981;"></i> Authentication</h3>
                     <button id="open-add-user-btn" style="background: #10b981; color: #000; padding: 10px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">+ Add User</button>
                 </div>
                 <div style="background: #1e293b; padding: 15px; border-radius: 10px; border: 1px solid #334155;">
                     <table width="100%" style="color: #fff; text-align: left; border-collapse: collapse;">
                         <thead>
                             <tr style="border-bottom: 1px solid #334155;">
+                                <th style="padding: 10px;">Name</th>
                                 <th style="padding: 10px;">Email</th>
                                 <th style="padding: 10px;">User UID</th>
                             </tr>
                         </thead>
-                        <tbody id="auth-users-list">
-                            <tr><td colspan="2" style="padding: 15px; text-align: center; color: #94a3b8;">Loading Users...</td></tr>
-                        </tbody>
+                        <tbody id="auth-users-list"></tbody>
                     </table>
                 </div>
             </div>
 
-                    <!-- ========================================== -->
-        <!-- 4. API KEYS SECTION -->
-        <!-- ========================================== -->
-        <div id="view-apikeys" class="content-section" style="display: none;">
-            <div class="header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2>🔑 API Keys Management</h2>
-            </div>
-            <div style="background: #1e293b; padding: 20px; border-radius: 10px; border: 1px solid #334155;">
-                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">यहाँ तुम्हारी सारी सीक्रेट चाबियाँ (API Keys) हैं। इन्हें किसी के साथ शेयर मत करना!</p>
-                
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                    <thead>
-                        <tr style="background: #0f172a; color: #94a3b8;">
-                            <th style="padding: 12px;">Project Name</th>
-                            <th style="padding: 12px;">Secret API Key</th>
-                            <th style="padding: 12px;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="api-keys-list">
-                        <!-- यहाँ JavaScript से चाबियां लोड होंगी -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- 5. SETTINGS SECTION -->
-        <!-- ========================================== -->
-        <div id="view-settings" class="content-section" style="display: none;">
-            <div class="header-flex" style="margin-bottom: 20px;">
-                <h2>⚙️ System Settings</h2>
-            </div>
-            
-            <div style="background: #1e293b; padding: 30px; border-radius: 10px; border: 1px solid #334155; max-width: 600px;">
-                <h3 style="color: #10b981; margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px;">Admin Profile</h3>
-                
-                <div style="margin-bottom: 15px; margin-top: 20px;">
-                    <label style="color: #94a3b8; font-size: 14px;">Admin Name</label>
-                    <input type="text" value="Super Admin" style="width: 90%; padding: 12px; margin-top: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 5px; outline: none;">
+            <div id="view-apikeys" class="content-section" style="display: none;">
+                <h3 style="color: #f8fafc; margin-bottom: 20px;">🔑 API Keys Management</h3>
+                <div style="background: #1e293b; padding: 20px; border-radius: 10px; border: 1px solid #334155;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; color: white;">
+                        <thead>
+                            <tr style="background: #0f172a; color: #94a3b8;">
+                                <th style="padding: 12px;">Project Name</th>
+                                <th style="padding: 12px;">Secret API Key</th>
+                                <th style="padding: 12px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="api-keys-list"></tbody>
+                    </table>
                 </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <label style="color: #94a3b8; font-size: 14px;">Admin Email</label>
-                    <input type="email" value="admin@universalbaas.com" style="width: 90%; padding: 12px; margin-top: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 5px; outline: none;">
-                </div>
-                
-                <button style="background: #10b981; color: black; border: none; padding: 12px 20px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s;">Save Changes</button>
             </div>
-        </div>
 
+            <div id="view-settings" class="content-section" style="display: none;">
+                <h3 style="color: #f8fafc; margin-bottom: 20px;">⚙️ System Settings</h3>
+                <div style="background: #1e293b; padding: 30px; border-radius: 10px; border: 1px solid #334155; max-width: 500px;">
+                    <label style="color: #94a3b8;">Admin Name</label>
+                    <input type="text" value="Super Admin" style="width: 90%; padding: 10px; margin: 10px 0; background: #0f172a; color: white; border: 1px solid #475569; border-radius: 5px;">
+                    <button style="background: #10b981; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer;">Save</button>
+                </div>
+            </div>
+        </main>
+    </div>
 
-    <!-- MODAL 1: Add User Pop-up -->
     <div id="addUserModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -166,19 +128,22 @@
             </div>
             <div class="modal-body">
                 <div style="margin-bottom: 15px;">
-                    <label style="color: #cbd5e1; display: block; margin-bottom: 5px;">User Email</label>
-                    <input type="email" id="new-user-email" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: #fff; outline: none;">
+                    <label style="color: #cbd5e1; display: block;">Name</label>
+                    <input type="text" id="new-user-name" placeholder="Gamer Name" style="width: 100%; padding: 10px; background: #0f172a; color: #fff; border: 1px solid #334155; border-radius: 5px;">
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <label style="color: #cbd5e1; display: block; margin-bottom: 5px;">Password</label>
-                    <input type="password" id="new-user-password" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: #fff; outline: none;">
+                    <label style="color: #cbd5e1; display: block;">Email</label>
+                    <input type="email" id="new-user-email" style="width: 100%; padding: 10px; background: #0f172a; color: #fff; border: 1px solid #334155; border-radius: 5px;">
                 </div>
-                <button id="save-user-btn" style="width: 100%; padding: 12px; background: #10b981; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Add to Database</button>
+                <div style="margin-bottom: 15px;">
+                    <label style="color: #cbd5e1; display: block;">Password</label>
+                    <input type="password" id="new-user-password" style="width: 100%; padding: 10px; background: #0f172a; color: #fff; border: 1px solid #334155; border-radius: 5px;">
+                </div>
+                <button id="save-user-btn" style="width: 100%; padding: 12px; background: #10b981; font-weight: bold; border: none; border-radius: 5px; cursor: pointer;">Add to Database</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 2: Create Project Pop-up (नया कदम) -->
     <div id="addProjectModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -186,11 +151,8 @@
                 <span class="close-btn" id="closeProjectModal">&times;</span>
             </div>
             <div class="modal-body">
-                <div style="margin-bottom: 15px;">
-                    <label style="color: #cbd5e1; display: block; margin-bottom: 5px;">Project Name</label>
-                    <input type="text" id="new-project-name" placeholder="e.g. Adept Play" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: #fff; outline: none;">
-                </div>
-                <button id="save-project-btn" style="width: 100%; padding: 12px; background: #10b981; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Create & Generate Key</button>
+                <input type="text" id="new-project-name" placeholder="Project Name" style="width: 100%; padding: 10px; margin-bottom: 15px; background: #0f172a; color: #fff; border: 1px solid #334155; border-radius: 5px;">
+                <button id="save-project-btn" style="width: 100%; padding: 12px; background: #10b981; font-weight: bold; border: none; border-radius: 5px; cursor: pointer;">Generate API Key</button>
             </div>
         </div>
     </div>
