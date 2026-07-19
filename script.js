@@ -214,3 +214,51 @@ window.onload = function() {
         fetchAndDisplayUsers();
     }
 };
+
+// 5D. Projects ko database se mangana aur table mein dikhana
+async function fetchAndDisplayProjects() {
+    const projectTable = document.getElementById('projects-list');
+    if (!projectTable) return;
+
+    projectTable.innerHTML = '<tr><td colspan="3" style="padding: 15px; text-align: center; color: #10b981;">Loading Projects... <i class="fa-solid fa-spinner fa-spin"></i></td></tr>';
+
+    try {
+        const response = await fetch(`${BASE_URL}/baas-apps`); 
+        if (!response.ok) throw new Error("API Not Found");
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+            projectTable.innerHTML = ''; 
+            data.forEach(proj => {
+                // API Key ko thoda chupa kar dikhayenge taaki safe rahe
+                const shortKey = proj.apiKey.substring(0, 15) + '...';
+                
+                const row = `
+                    <tr style="border-bottom: 1px solid #334155;">
+                        <td style="padding: 15px 10px; font-weight: bold;">${proj.name}</td>
+                        <td style="padding: 15px 10px; color: #10b981; font-family: monospace;">${shortKey}</td>
+                        <td style="padding: 15px 10px;"><span style="color: #10b981; background: rgba(16,185,129,0.2); padding: 5px 10px; border-radius: 20px; font-size: 12px;">${proj.status || 'Active'}</span></td>
+                    </tr>`;
+                projectTable.innerHTML += row;
+            });
+        } else {
+            projectTable.innerHTML = '<tr><td colspan="3" style="padding: 15px; text-align: center; color: #94a3b8;">No projects found. Create one!</td></tr>';
+        }
+    } catch (error) {
+        projectTable.innerHTML = '<tr><td colspan="3" style="padding: 15px; text-align: center; color: #ef4444;">Failed to load projects.</td></tr>';
+    }
+}
+
+// Sidebar mein 'All Projects' par click karne par list update karna
+document.querySelectorAll('.sidebar-menu ul li').forEach(item => {
+    item.addEventListener('click', function() {
+        if (this.innerText.includes('All Projects')) {
+            fetchAndDisplayProjects();
+        }
+    });
+});
+
+// Page load hone par agar All Projects khula ho toh
+if(document.getElementById('view-projects') && document.getElementById('view-projects').style.display === 'block') {
+    fetchAndDisplayProjects();
+}
