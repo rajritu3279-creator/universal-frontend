@@ -28,7 +28,7 @@
     </nav>
 
     <!-- मेन कंटेंट -->
-    <div class="main-content" id="main-content">
+    < class="main-content" id="main-content">
         <header>
             <h2><i class="fa-solid fa-bars" id="nav-toggle"></i> System Overview</h2>
             <div class="user-wrapper">
@@ -106,17 +106,56 @@
                 </div>
             </div>
 
-            <!-- 5. API KEYS -->
-            <div id="view-apikeys" class="content-section" style="display: none;">
-                <h3 style="color: #f8fafc; margin-bottom: 20px;">API Keys Management</h3>
+                    <!-- ========================================== -->
+        <!-- 4. API KEYS SECTION -->
+        <!-- ========================================== -->
+        <div id="view-apikeys" class="content-section" style="display: none;">
+            <div class="header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>🔑 API Keys Management</h2>
             </div>
+            <div style="background: #1e293b; padding: 20px; border-radius: 10px; border: 1px solid #334155;">
+                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">यहाँ तुम्हारी सारी सीक्रेट चाबियाँ (API Keys) हैं। इन्हें किसी के साथ शेयर मत करना!</p>
+                
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="background: #0f172a; color: #94a3b8;">
+                            <th style="padding: 12px;">Project Name</th>
+                            <th style="padding: 12px;">Secret API Key</th>
+                            <th style="padding: 12px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="api-keys-list">
+                        <!-- यहाँ JavaScript से चाबियां लोड होंगी -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            <!-- 6. SETTINGS -->
-            <div id="view-settings" class="content-section" style="display: none;">
-                <h3 style="color: #f8fafc; margin-bottom: 20px;">System Settings</h3>
+        <!-- ========================================== -->
+        <!-- 5. SETTINGS SECTION -->
+        <!-- ========================================== -->
+        <div id="view-settings" class="content-section" style="display: none;">
+            <div class="header-flex" style="margin-bottom: 20px;">
+                <h2>⚙️ System Settings</h2>
             </div>
-        </main>
-    </div>
+            
+            <div style="background: #1e293b; padding: 30px; border-radius: 10px; border: 1px solid #334155; max-width: 600px;">
+                <h3 style="color: #10b981; margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px;">Admin Profile</h3>
+                
+                <div style="margin-bottom: 15px; margin-top: 20px;">
+                    <label style="color: #94a3b8; font-size: 14px;">Admin Name</label>
+                    <input type="text" value="Super Admin" style="width: 90%; padding: 12px; margin-top: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 5px; outline: none;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="color: #94a3b8; font-size: 14px;">Admin Email</label>
+                    <input type="email" value="admin@universalbaas.com" style="width: 90%; padding: 12px; margin-top: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 5px; outline: none;">
+                </div>
+                
+                <button style="background: #10b981; color: black; border: none; padding: 12px 20px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.3s;">Save Changes</button>
+            </div>
+        </div>
+
 
     <!-- MODAL 1: Add User Pop-up -->
     <div id="addUserModal" class="modal">
