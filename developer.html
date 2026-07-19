@@ -6,7 +6,7 @@
     <title>Universal BaaS - Developer Console</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; color: white; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #0f172a; color: white; }
         
         /* Navbar */
         .navbar { background: #1e293b; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
@@ -20,48 +20,112 @@
         .btn-primary { background: #3b82f6; color: white; padding: 12px; width: 100%; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .btn-secondary { background: transparent; color: #94a3b8; border: 1px solid #475569; padding: 12px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 10px; }
 
-        /* 2. Dashboard Section (लॉगिन के बाद) */
+        /* 2. Dashboard Section (प्रोजेक्ट लिस्ट) */
         #dashboard-section { display: none; max-width: 1000px; margin: 40px auto; padding: 20px; }
-        .welcome-text { font-size: 24px; margin-bottom: 30px; color: #f8fafc; }
-        .project-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 15px; margin-bottom: 20px; }
-        
-        .project-card { background: #1e293b; padding: 20px; border-radius: 10px; border: 1px solid #334155; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .project-card { background: #1e293b; padding: 20px; border-radius: 10px; border: 1px solid #334155; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; }
+        .project-card:hover { border-color: #3b82f6; transform: translateY(-3px); }
         .project-name { font-size: 20px; font-weight: bold; color: #10b981; margin: 0; }
-        .api-key-box { background: #0f172a; padding: 10px; border-radius: 5px; font-family: monospace; color: #f59e0b; margin-top: 10px; border: 1px solid #475569; display: inline-block; }
+        
+        /* 3. Project Workspace (प्रोजेक्ट के अंदर का फायरबेस जैसा व्यू) */
+        #workspace-section { display: none; display: flex; height: calc(100vh - 60px); }
+        
+        /* Workspace Sidebar */
+        .work-sidebar { width: 250px; background: #1e293b; border-right: 1px solid #334155; padding: 20px 0; }
+        .work-sidebar h3 { padding: 0 20px; color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .menu-item { padding: 12px 20px; color: #e2e8f0; cursor: pointer; display: block; border-left: 3px solid transparent; }
+        .menu-item:hover, .menu-item.active { background: #0f172a; border-left-color: #3b82f6; color: #3b82f6; font-weight: bold; }
+        
+        /* Workspace Main Content */
+        .work-main { flex: 1; padding: 30px; overflow-y: auto; }
+        .back-btn { background: transparent; color: #94a3b8; border: none; cursor: pointer; font-size: 16px; margin-bottom: 20px; }
+        .back-btn:hover { color: white; }
+        
+        /* Settings Card (Toggle Switches) */
+        .setting-card { background: #1e293b; padding: 20px; border-radius: 10px; border: 1px solid #334155; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .toggle-btn { background: #475569; border: none; padding: 8px 15px; color: white; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        .toggle-btn.on { background: #10b981; }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <h2><i class="fa-solid fa-cloud"></i> Universal BaaS Console</h2>
+        <h2><i class="fa-solid fa-cloud"></i> Universal BaaS</h2>
         <button id="logout-btn" class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
     </div>
 
+    <!-- 1. AUTH SCREEN -->
     <div id="auth-section">
         <div class="auth-box">
-            <h2>Welcome Developer</h2>
-            <p style="color: #94a3b8; font-size: 14px;">Log in to manage your BaaS projects.</p>
-            
+            <h2>Developer Console</h2>
+            <p style="color: #94a3b8; font-size: 14px;">Build scalable apps with ease.</p>
             <input type="text" id="dev-name" placeholder="Full Name (Only for Sign Up)">
             <input type="email" id="dev-email" placeholder="Developer Email">
             <input type="password" id="dev-pass" placeholder="Password">
-            
-            <button class="btn-primary" onclick="login()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-            <button class="btn-secondary" onclick="register()">Create New Account</button>
+            <button class="btn-primary" onclick="login()">Login</button>
+            <button class="btn-secondary" onclick="register()">Create Account</button>
             <p id="auth-msg" style="color: #ef4444; font-size: 14px; margin-top: 15px;"></p>
         </div>
     </div>
 
+    <!-- 2. PROJECT LIST SCREEN -->
     <div id="dashboard-section">
-        <div class="welcome-text">👋 Hello, <span id="display-name" style="color: #3b82f6;">Developer</span>!</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 15px; margin-bottom: 20px;">
+            <h2 style="margin:0;">Your Projects</h2>
+            <button style="background: #10b981; color: black; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer;" onclick="createNewProject()">+ Add Project</button>
+        </div>
+        <div id="my-projects-list"><p style="color: #94a3b8;">Loading...</p></div>
+    </div>
+
+    <!-- 3. PROJECT WORKSPACE (नया फायरबेस व्यू) -->
+    <div id="workspace-section" style="display: none;">
         
-        <div class="project-header">
-            <h3>Your Projects</h3>
-            <button style="background: #10b981; color: black; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer;" onclick="createNewProject()">+ New Project</button>
+        <!-- बायां मेनू (Sidebar) -->
+        <div class="work-sidebar">
+            <h3 style="margin-top:0;">Build</h3>
+            <div class="menu-item active"><i class="fa-solid fa-users"></i> Authentication</div>
+            <div class="menu-item"><i class="fa-solid fa-database"></i> Realtime DB</div>
+            <div class="menu-item"><i class="fa-solid fa-folder-open"></i> Storage</div>
+            
+            <h3 style="margin-top:20px;">Engage</h3>
+            <div class="menu-item"><i class="fa-solid fa-bell"></i> Cloud Messaging</div>
+            
+            <h3 style="margin-top:20px;">Settings</h3>
+            <div class="menu-item"><i class="fa-solid fa-gear"></i> Project Settings</div>
         </div>
 
-        <div id="my-projects-list">
-            <p style="color: #94a3b8;">Loading your projects...</p>
+        <!-- दायां हिस्सा (Main Content) -->
+        <div class="work-main">
+            <button class="back-btn" onclick="goBackToProjects()"><i class="fa-solid fa-arrow-left"></i> Back to all projects</button>
+            <h1 id="active-project-name" style="color: #3b82f6; margin-top: 0;">Project Name</h1>
+            <p style="color: #94a3b8; font-family: monospace; background: #0f172a; padding: 10px; border-radius: 5px; display: inline-block;">API Key: <span id="active-api-key">...</span></p>
+
+            <h2 style="margin-top: 30px; border-bottom: 1px solid #334155; padding-bottom: 10px;">Sign-in Methods (Authentication)</h2>
+            
+            <!-- Auth Toggles -->
+            <div class="setting-card">
+                <div>
+                    <h3 style="margin:0;"><i class="fa-solid fa-envelope"></i> Email/Password</h3>
+                    <p style="margin:5px 0 0; color:#94a3b8; font-size:13px;">Allow users to sign up with email.</p>
+                </div>
+                <button class="toggle-btn on">Enabled</button>
+            </div>
+
+            <div class="setting-card">
+                <div>
+                    <h3 style="margin:0;"><i class="fa-brands fa-google"></i> Google Sign-In</h3>
+                    <p style="margin:5px 0 0; color:#94a3b8; font-size:13px;">One-tap login with Google.</p>
+                </div>
+                <button class="toggle-btn">Disabled</button>
+            </div>
+
+            <div class="setting-card">
+                <div>
+                    <h3 style="margin:0;"><i class="fa-solid fa-phone"></i> Phone Authentication</h3>
+                    <p style="margin:5px 0 0; color:#94a3b8; font-size:13px;">OTP based mobile login.</p>
+                </div>
+                <button class="toggle-btn">Disabled</button>
+            </div>
+
         </div>
     </div>
 
@@ -69,123 +133,71 @@
         const BASE_URL = 'https://universal-backend-3.onrender.com/api';
         let currentDeveloperId = null;
 
-        // 1. REGISTER (नया अकाउंट)
         async function register() {
-            const name = document.getElementById('dev-name').value;
-            const email = document.getElementById('dev-email').value;
-            const pass = document.getElementById('dev-pass').value;
-            const msg = document.getElementById('auth-msg');
-
-            if(!name || !email || !pass) return msg.innerText = "नाम, ईमेल और पासवर्ड तीनों ज़रूरी हैं!";
-            msg.innerText = "Creating account... ⏳";
-
-            try {
-                const res = await fetch(`${BASE_URL}/dev-auth/register`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password: pass })
-                });
-                const data = await res.json();
-                
-                if(res.ok) {
-                    successLogin(data.developerId, data.name);
-                } else {
-                    msg.innerText = "❌ " + data.message;
-                }
-            } catch(e) { msg.innerText = "❌ Server Connection Error!"; }
+            const name = document.getElementById('dev-name').value, email = document.getElementById('dev-email').value, pass = document.getElementById('dev-pass').value;
+            if(!name || !email || !pass) return alert("Fill all details");
+            const res = await fetch(`${BASE_URL}/dev-auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password: pass }) });
+            if(res.ok) { const data = await res.json(); successLogin(data.developerId); } else alert("Error");
         }
 
-        // 2. LOGIN (पुराना अकाउंट)
         async function login() {
-            const email = document.getElementById('dev-email').value;
-            const pass = document.getElementById('dev-pass').value;
-            const msg = document.getElementById('auth-msg');
-
-            if(!email || !pass) return msg.innerText = "ईमेल और पासवर्ड डालें!";
-            msg.innerText = "Logging in... ⏳";
-
-            try {
-                const res = await fetch(`${BASE_URL}/dev-auth/login`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password: pass })
-                });
-                const data = await res.json();
-                
-                if(res.ok) {
-                    successLogin(data.developerId, data.name);
-                } else {
-                    msg.innerText = "❌ " + data.message;
-                }
-            } catch(e) { msg.innerText = "❌ Server Connection Error!"; }
+            const email = document.getElementById('dev-email').value, pass = document.getElementById('dev-pass').value;
+            if(!email || !pass) return alert("Fill details");
+            const res = await fetch(`${BASE_URL}/dev-auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: pass }) });
+            if(res.ok) { const data = await res.json(); successLogin(data.developerId); } else alert("Invalid Login");
         }
 
-        // 3. SUCCESS LOGIN & LOAD DASHBOARD
-        function successLogin(devId, devName) {
-            currentDeveloperId = devId; // ID सेव कर ली
+        function successLogin(devId) {
+            currentDeveloperId = devId;
             document.getElementById('auth-section').style.display = 'none';
             document.getElementById('dashboard-section').style.display = 'block';
             document.getElementById('logout-btn').style.display = 'block';
-            document.getElementById('display-name').innerText = devName;
-            
-            loadMyProjects(); // सिर्फ इस डेवलपर के प्रोजेक्ट मंगाओ
+            loadMyProjects();
         }
 
-        // 4. LOAD PROJECTS (सिर्फ खुद के)
         async function loadMyProjects() {
             const list = document.getElementById('my-projects-list');
-            list.innerHTML = '<p style="color: #10b981;">Fetching your data... ⏳</p>';
-            
-            try {
-                // यहाँ हम URL में ownerId (developerId) भेज रहे हैं!
-                const res = await fetch(`${BASE_URL}/baas-apps/developer/${currentDeveloperId}`);
-                const apps = await res.json();
-
-                list.innerHTML = '';
-                if(apps.length === 0) {
-                    list.innerHTML = '<div style="text-align: center; padding: 40px; background: #1e293b; border-radius: 10px; color: #94a3b8;">You don\'t have any projects yet. Click "+ New Project" to start!</div>';
-                    return;
-                }
-
-                apps.forEach(app => {
-                    list.innerHTML += `
-                    <div class="project-card">
-                        <div>
-                            <h3 class="project-name">${app.name}</h3>
-                            <div class="api-key-box">Key: ${app.apiKey}</div>
-                        </div>
-                        <button onclick="navigator.clipboard.writeText('${app.apiKey}'); alert('Key Copied!');" style="background: #3b82f6; border: none; color: white; padding: 10px; border-radius: 5px; cursor: pointer;"><i class="fa-solid fa-copy"></i> Copy</button>
-                    </div>`;
-                });
-            } catch(e) { list.innerHTML = '<p style="color: #ef4444;">Failed to load projects.</p>'; }
+            const res = await fetch(`${BASE_URL}/baas-apps/developer/${currentDeveloperId}`);
+            const apps = await res.json();
+            list.innerHTML = '';
+            apps.forEach(app => {
+                // प्रोजेक्ट कार्ड पर क्लिक करते ही workspace खुलेगा
+                list.innerHTML += `
+                <div class="project-card" onclick="openWorkspace('${app.name}', '${app.apiKey}')">
+                    <h3 class="project-name">${app.name}</h3>
+                    <span style="color:#94a3b8;">Click to open console <i class="fa-solid fa-arrow-right"></i></span>
+                </div>`;
+            });
         }
 
-        // 5. CREATE NEW PROJECT
         async function createNewProject() {
-            const projName = prompt("Enter new project name (e.g., My Ludo Game):");
-            if(!projName) return;
-
-            try {
-                // प्रोजेक्ट बनाते समय हम बता रहे हैं कि इसका मालिक कौन है (ownerId)
-                const res = await fetch(`${BASE_URL}/baas-apps`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: projName, ownerId: currentDeveloperId })
-                });
-                
-                if(res.ok) {
-                    alert("🎉 Project created successfully!");
-                    loadMyProjects(); // लिस्ट रिफ्रेश करो
-                } else {
-                    alert("Failed to create project.");
-                }
-            } catch(e) { alert("Server Error."); }
+            const name = prompt("Project Name:");
+            if(name) {
+                await fetch(`${BASE_URL}/baas-apps`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, ownerId: currentDeveloperId }) });
+                loadMyProjects();
+            }
         }
 
-        // 6. LOGOUT
+        // 🔥 नया फंक्शन: प्रोजेक्ट के अंदर (Workspace) जाना
+        function openWorkspace(appName, apiKey) {
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('workspace-section').style.display = 'flex';
+            document.getElementById('active-project-name').innerText = appName;
+            document.getElementById('active-api-key').innerText = apiKey;
+        }
+
+        // 🔥 वापस प्रोजेक्ट लिस्ट पर आना
+        function goBackToProjects() {
+            document.getElementById('workspace-section').style.display = 'none';
+            document.getElementById('dashboard-section').style.display = 'block';
+        }
+
         function logout() {
             currentDeveloperId = null;
-            document.getElementById('auth-section').style.display = 'flex';
+            document.getElementById('workspace-section').style.display = 'none';
             document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('auth-section').style.display = 'flex';
             document.getElementById('logout-btn').style.display = 'none';
-            document.getElementById('dev-pass').value = '';
         }
     </script>
 </body>
